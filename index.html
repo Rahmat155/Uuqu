@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2563eb">
+<meta name="description" content="TempMail — email sementara untuk menerima pesan dan kode verifikasi.">
+<title>TempMail — Email Sementara</title>
+<style>
+:root{color-scheme:light;--blue:#2563eb;--blue2:#1d4ed8;--ink:#172033;--muted:#64748b;--line:#e2e8f0;--bg:#f4f7fb;--card:#fff;--soft:#eff6ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#dbeafe 0,transparent 35%),var(--bg);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink)}
+.wrap{max-width:960px;margin:auto;padding:28px 16px 44px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}.brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:1.25rem;letter-spacing:-.03em}.logo{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:var(--blue);color:white;box-shadow:0 8px 20px #2563eb40}.pill{font-size:.78rem;color:#166534;background:#dcfce7;padding:6px 10px;border-radius:99px;font-weight:700}
+.hero{text-align:center;margin:20px auto 26px;max-width:650px}.eyebrow{color:var(--blue);font-weight:800;text-transform:uppercase;font-size:.75rem;letter-spacing:.12em}.hero h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.08;letter-spacing:-.05em;margin:10px 0}.hero p{color:var(--muted);margin:0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(16px,4vw,28px);box-shadow:0 18px 50px #0f172a0a;margin-bottom:18px}.label{font-size:.85rem;font-weight:750;color:#475569;margin-bottom:9px}.addressrow{display:flex;gap:10px;align-items:stretch}.address{min-width:0;flex:1;background:#f8fafc;border:1px solid var(--line);border-radius:13px;padding:13px 14px;font-weight:750;overflow-wrap:anywhere;display:flex;align-items:center}.btn{border:0;border-radius:12px;padding:12px 16px;font:inherit;font-weight:750;cursor:pointer;transition:.15s}.btn:disabled{opacity:.55;cursor:not-allowed}.primary{background:var(--blue);color:#fff}.primary:hover{background:var(--blue2)}.secondary{background:var(--soft);color:var(--blue)}.ghost{background:#f1f5f9;color:#334155}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.statusrow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;color:var(--muted);font-size:.88rem}.timer{font-weight:800;color:#1d4ed8;font-variant-numeric:tabular-nums}.dot{display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;margin-right:7px}.inboxhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.inboxhead h2{font-size:1.12rem;margin:0}.count{font-size:.78rem;font-weight:800;background:#eff6ff;color:#1d4ed8;padding:5px 9px;border-radius:99px}.message-list{display:grid;gap:10px}.empty{border:1px dashed #cbd5e1;border-radius:16px;padding:30px 18px;text-align:center;color:var(--muted)}.empty .big{font-size:2rem;margin-bottom:6px}.msg{width:100%;text-align:left;background:white;border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer}.msg:hover{border-color:#93c5fd;background:#f8fbff}.msg-top{display:flex;justify-content:space-between;gap:12px}.msg-subject{font-weight:800}.msg-from,.msg-intro,.msg-date{font-size:.84rem;color:var(--muted)}.msg-intro{margin-top:5px}.detail{white-space:pre-wrap;overflow-wrap:anywhere;background:#f8fafc;border:1px solid var(--line);padding:15px;border-radius:13px;margin-top:12px;font-size:.92rem;max-height:350px;overflow:auto}.note{font-size:.8rem;color:var(--muted);text-align:center;margin:18px auto 0;max-width:760px}.notice{display:none;padding:11px 13px;border-radius:12px;margin:12px 0;font-size:.9rem}.notice.show{display:block}.notice.error{background:#fef2f2;color:#991b1b}.notice.info{background:#eff6ff;color:#1e40af}.footlinks{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:.8rem}.footlinks a{color:var(--blue)}button:focus-visible,a:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+@media(max-width:560px){.wrap{padding:18px 12px 32px}.top{margin-bottom:20px}.addressrow{flex-direction:column}.address{min-height:48px}.actions .btn{flex:1}.statusrow{align-items:flex-start;flex-direction:column}.panel{border-radius:18px}.msg-top{flex-direction:column;gap:3px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo" aria-hidden="true">✉</div><span>TempMail</span></div>
+    <span class="pill">● Gratis untuk dicoba</span>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">Inbox sementara</div>
+    <h1>Email baru. Tanpa ribet.</h1>
+    <p>Buat alamat email sementara dan lihat pesan masuk dari satu halaman.</p>
+  </section>
+  <main>
+    <section class="panel" aria-label="Alamat email sementara">
+      <div class="label">ALAMAT EMAIL KAMU</div>
+      <div class="addressrow">
+        <div id="address" class="address" aria-live="polite">Klik “Buat email” untuk memulai</div>
+        <button id="copyBtn" class="btn secondary" disabled>Salin</button>
+      </div>
+      <div id="notice" class="notice" role="status"></div>
+      <div class="actions">
+        <button id="newBtn" class="btn primary">✦ Buat email</button>
+        <button id="refreshBtn" class="btn secondary" disabled>↻ Refresh inbox</button>
+        <button id="deleteBtn" class="btn ghost" disabled>Hapus email</button>
+      </div>
+      <div class="statusrow">
+        <span><span class="dot"></span><span id="status">Belum ada email aktif</span></span>
+        <span>Masa aktif: <span id="timer" class="timer">15:00</span></span>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="inboxhead"><h2>📥 Kotak masuk</h2><span id="count" class="count">0 pesan</span></div>
+      <div id="messages" class="message-list">
+        <div class="empty"><div class="big">📭</div><strong>Inbox masih kosong</strong><br><span>Buat email, lalu tunggu pesan masuk.</span></div>
+      </div>
+      <div id="detail" hidden></div>
+    </section>
+  </main>
+  <p class="note">Jangan gunakan email sementara untuk akun penting, pemulihan akun, perbankan, atau informasi rahasia. Email dapat dihapus saat timer habis. Layanan email pihak ketiga dapat menyimpan log dan memiliki batas penggunaan.</p>
+  <div class="footlinks"><a href="https://docs.mail.tm/" target="_blank" rel="noopener noreferrer">API email oleh Mail.tm</a><a href="https://mail.tm/" target="_blank" rel="noopener noreferrer">Kunjungi Mail.tm</a></div>
+</div>
+<script>
+(() => {
+  const API = "https://api.mail.tm";
+  const LIFETIME_SECONDS = 15 * 60;
+  const POLL_MS = 10000;
+  const $ = id => document.getElementById(id);
+  const state = { address:null, password:null, token:null, accountId:null, expiresAt:0, timer:null, poll:null, messages:[], busy:false };
+  const els = {
+    address:$("address"), copy:$("copyBtn"), newBtn:$("newBtn"), refresh:$("refreshBtn"),
+    delete:$("deleteBtn"), status:$("status"), timer:$("timer"), notice:$("notice"),
+    messages:$("messages"), count:$("count"), detail:$("detail")
+  };
+  function notice(text, kind="info") { els.notice.textContent=text; els.notice.className="notice show "+kind; }
+  function clearNotice(){ els.notice.className="notice"; els.notice.textContent=""; }
+  async function api(path, options={}) {
+    const headers = new Headers(options.headers || {});
+    if (state.token) headers.set("Authorization", "Bearer "+state.token);
+    if (options.body) headers.set("Content-Type","application/json");
+    const res = await fetch(API+path, {...options, headers});
+    if (!res.ok) {
+      let msg = "Permintaan gagal ("+res.status+")";
+      try { const data=await res.json(); msg=data["hydra:description"]||data.message||msg; } catch {}
+      throw new Error(msg);
+    }
+    if (res.status===204) return null;
+    return res.json();
+  }
+  function randomString(n=12) {
+    const chars="abcdefghjkmnpqrstuvwxyz23456789";
+    const bytes=crypto.getRandomValues(new Uint8Array(n));
+    return Array.from(bytes,b=>chars[b%chars.length]).join("");
+  }
+  function stopLoops(){
+    if(state.timer) clearInterval(state.timer);
+    if(state.poll) clearInterval(state.poll);
+    state.timer=null; state.poll=null;
+  }
+  function setEnabled(on){
+    els.copy.disabled=!on; els.refresh.disabled=!on; els.delete.disabled=!on;
+  }
+  function formatTime(seconds){
+    const m=Math.floor(Math.max(0,seconds)/60).toString().padStart(2,"0");
+    const s=(Math.max(0,seconds)%60).toString().padStart(2,"0");
+    return m+":"+s;
+  }
+  function startTimer(){
+    if(state.timer) clearInterval(state.timer);
+    const tick=()=>{
+      const left=Math.max(0,Math.ceil((state.expiresAt-Date.now())/1000));
+      els.timer.textContent=formatTime(left);
+      if(left<=0) expire();
+    };
+    tick(); state.timer=setInterval(tick,1000);
+  }
+  async function expire(){
+    if(!state.address) return;
+    const oldAddress=state.address;
+    const token=state.token;
+    stopLoops();
+    state.address=null; state.token=null; state.password=null; state.accountId=null; state.messages=[];
+    setEnabled(false);
+    els.address.textContent="Email kedaluwarsa — buat yang baru";
+    els.status.textContent="Masa aktif habis";
+    els.timer.textContent="00:00";
+    renderMessages([]);
+    if(token) {
+      try {
+        const h=new Headers({"Authorization":"Bearer "+token});
+        await fetch(API+"/me",{headers:h}).then(r=>r.ok?r.json():null).then(async me=>{
+          if(me && me.id) await fetch(API+"/accounts/"+encodeURIComponent(me.id),{method:"DELETE",headers:h});
+        });
+      } catch {}
+    }
+    notice(oldAddress+" sudah kedaluwarsa. Buat email baru untuk melanjutkan.");
+  }
+  async function createEmail(){
+    if(state.busy) return;
+    state.busy=true; els.newBtn.disabled=true; clearNotice();
+    stopLoops();
+    if(state.token) {
+      try { const me=await api("/me"); await api("/accounts/"+encodeURIComponent(me.id),{method:"DELETE"}); } catch {}
+    }
+    state.address=null;state.password=null;state.token=null;state.accountId=null;state.messages=[];
+    setEnabled(false);renderMessages([]);
+    els.address.textContent="Sedang membuat alamat email…";
+    els.status.textContent="Menghubungkan ke layanan email";
+    try {
+      const domainsData=await api("/domains");
+      const domains=(domainsData["hydra:member"]||[]).filter(d=>d.isActive && !d.isPrivate);
+      if(!domains.length) throw new Error("Belum ada domain email publik yang tersedia. Coba lagi nanti.");
+      let created=null, lastError=null;
+      for(let attempt=0;attempt<4 && !created;attempt++){
+        const domain=domains[Math.floor(Math.random()*domains.length)].domain;
+        const address=randomString(10)+"@"+domain;
+        const password=randomString(24);
+        try {
+          created=await api("/accounts",{method:"POST",body:JSON.stringify({address,password})});
+          state.address=address;state.password=password;state.accountId=created.id;
+        } catch(e){lastError=e;}
+      }
+      if(!created) throw lastError||new Error("Gagal membuat alamat. Coba lagi.");
+      const auth=await api("/token",{method:"POST",body:JSON.stringify({address:state.address,password:state.password})});
+      state.token=auth.token;
+      state.expiresAt=Date.now()+LIFETIME_SECONDS*1000;
+      els.address.textContent=state.address;els.status.textContent="Email aktif · inbox diperbarui otomatis";
+      setEnabled(true);startTimer();await refreshMessages();
+      state.poll=setInterval(()=>refreshMessages().catch(()=>{}),POLL_MS);
+      notice("Email siap digunakan. Timer berjalan selama 15 menit.");
+    } catch(e){
+      state.address=null;state.token=null;
+      els.address.textContent="Gagal membuat email";
+      els.status.textContent="Tidak terhubung";
+      notice((e.message||"Terjadi kesalahan.")+" Periksa koneksi atau coba lagi beberapa saat.", "error");
+    } finally { state.busy=false;els.newBtn.disabled=false; }
+  }
+  function extractOtp(text){
+    const matches=(text||"").match(/(?:^|\D)(\d{4,8})(?:\D|$)/g)||[];
+    const first=matches.map(x=>x.match(/\d{4,8}/)?.[0]).find(Boolean);
+    return first||null;
+  }
+  async function refreshMessages(){
+    if(!state.token||!state.address) return;
+    const data=await api("/messages");
+    const items=data["hydra:member"]||[];
+    state.messages=items;
+    renderMessages(items);
+  }
+  function renderMessages(items){
+    els.count.textContent=items.length+" pesan";
+    els.detail.hidden=true;els.detail.innerHTML="";
+    if(!items.length){
+      els.messages.innerHTML='<div class="empty"><div class="big">📭</div><strong>Belum ada pesan masuk</strong><br><span>Inbox akan diperiksa otomatis setiap 10 detik.</span></div>';
+      return;
+    }
+    els.messages.innerHTML="";
+    for(const msg of items){
+      const button=document.createElement("button");button.className="msg";
+      const top=document.createElement("div");top.className="msg-top";
+      const subject=document.createElement("div");subject.className="msg-subject";subject.textContent=msg.subject||"(Tanpa subjek)";
+      const date=document.createElement("div");date.className="msg-date";date.textContent=msg.createdAt?new Date(msg.createdAt).toLocaleString():"";
+      const from=document.createElement("div");from.className="msg-from";from.textContent="Dari: "+(msg.from?.address||msg.from?.name||"pengirim tidak diketahui");
+      const intro=document.createElement("div");intro.className="msg-intro";intro.textContent=msg.intro||"Buka pesan untuk membaca isi lengkap.";
+      top.append(subject,date);button.append(top,from,intro);
+      button.addEventListener("click",()=>openMessage(msg.id));
+      els.messages.append(button);
+    }
+  }
+  function safeText(v){return String(v??"");}
+  async function openMessage(id){
+    if(!state.token) return;
+    clearNotice();
+    try{
+      const msg=await api("/messages/"+encodeURIComponent(id));
+      const body=msg.text||msg.intro||"Isi teks tidak tersedia. Pesan mungkin hanya berisi HTML.";
+      const otp=extractOtp(body);
+      els.detail.hidden=false;els.detail.innerHTML="";
+      const heading=document.createElement("h3");heading.textContent=msg.subject||"(Tanpa subjek)";
+      const meta=document.createElement("div");meta.className="msg-from";meta.textContent="Dari: "+(msg.from?.address||"—")+" · "+(msg.createdAt?new Date(msg.createdAt).toLocaleString():"");
+      els.detail.append(heading,meta);
+      if(otp){
+        const box=document.createElement("div");box.style.cssText="margin:12px 0;padding:12px;border-radius:12px;background:#dcfce7;color:#166534;font-weight:800";
+        box.textContent="Kemungkinan kode OTP: "+otp+"  (periksa isi pesan untuk memastikan)";
+        const copy=document.createElement("button");copy.className="btn secondary";copy.textContent="Salin OTP";copy.style.marginLeft="8px";
+        copy.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(otp);notice("Kode disalin.");}catch{notice("Tidak bisa menyalin otomatis.","error");}});
+        box.append(copy);els.detail.append(box);
+      }
+      const content=document.createElement("div");content.className="detail";content.textContent=safeText(body);
+      els.detail.append(content);
+      els.detail.scrollIntoView({behavior:"smooth",block:"nearest"});
+      try{await api("/messages/"+encodeURIComponent(id),{method:"PATCH",body:JSON.stringify({seen:true})});}catch{}
+    }catch(e){notice("Tidak dapat membuka pesan: "+e.message,"error");}
+  }
+  async function deleteEmail(){
+    if(!state.address) return;
+    const old=state.address;stopLoops();
+    try{const me=await api("/me");await api("/accounts/"+encodeURIComponent(me.id),{method:"DELETE"});}catch{}
+    state.address=null;state.token=null;state.password=null;state.accountId=null;state.messages=[];
+    setEnabled(false);renderMessages([]);
+    els.address.textContent="Email telah dihapus";els.status.textContent="Tidak ada email aktif";els.timer.textContent="15:00";
+    notice(old+" dihapus. Buat alamat baru kapan saja.");
+  }
+  els.newBtn.addEventListener("click",createEmail);
+  els.refresh.addEventListener("click",()=>refreshMessages().then(()=>notice("Inbox diperbarui.")).catch(e=>notice("Gagal memperbarui inbox: "+e.message,"error")));
+  els.delete.addEventListener("click",deleteEmail);
+  els.copy.addEventListener("click",async()=>{if(!state.address)return;try{await navigator.clipboard.writeText(state.address);notice("Alamat email disalin.");}catch{notice("Salin alamat secara manual.","error");}});
+})();
+</script>
+</body>
+</html>
